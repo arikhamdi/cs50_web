@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Advanced Search</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <a id="search_link" href="index.html">Search</a>
+        <div class="container">
+            <h2 class="text-danger">Advanced Search</h2>
+            <form action="https://www.google.com/advanced_search">
+                <div class="form-group row">
+                    <label for="allWords:" class="col-sm-2 col-form-label">all these words:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="as_q">
+                    </div>
+                    <p class="col-sm-4">Type the important words: tri-colour rat terrier</p>
+                </div>
+                <div class="form-group row">
+                    <label for="exactPhrase" class="col-sm-2 col-form-label">this exact word or phrase:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="as_epq">
+                    </div>
+                    <p class="col-sm-4">Put exact words in quotes: "rat terrier"</p>
+                </div>
+                <div class="form-group row">
+                    <label for="anyWords" class="col-sm-2 col-form-label">any of these words:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="as_oq">
+                    </div>
+                    <p class="col-sm-4">Type OR between all the words you want: miniature OR standard</p>
+                </div>
+                <div class="form-group row">
+                    <label for="noneWords" class="col-sm-2 col-form-label">none of these words:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="as_eq">
+                    </div>
+                    <p class="col-sm-4">Put a minus sign just before words that you don't want: -rodent, -"Jack Russell"</p>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Advanced Search</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
