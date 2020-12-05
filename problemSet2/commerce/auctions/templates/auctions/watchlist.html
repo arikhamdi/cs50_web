@@ -1,0 +1,15 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <ul>
+        {% for auction in list %}
+            <li><a href="{% url 'single_listing' auction.auction.id %}">{{ auction.auction }}</a></li>
+        {% empty %}
+            Noting in your watchlist
+        {% endfor %}
+    </ul>
+{% endblock %}

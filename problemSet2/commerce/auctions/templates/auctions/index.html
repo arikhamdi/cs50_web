@@ -1,0 +1,39 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container">
+ 
+    <h2>Active Listings</h2>
+    <hr>
+
+        {% for auction in listing %}
+        
+        <div class="row">
+                <div class="col-md-4">
+                    <a href="{% url 'single_listing' auction.id %}">
+                        <img src="{{ auction.image }}" alt="broomstick" width="100%">
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <a href="{% url 'single_listing' auction.id %}">
+                                <h2>{{ auction.title }}</h2> 
+                            </a>
+                        </div>
+                        <div class="col col-md-12">
+                            <p>Price : €{{ auction.price }}</p>
+                        </div>
+                        <div class="col col-md-12">
+                            <p>Created {{ auction.created }}</p>
+                        </div>
+                    </div>                
+                </div>
+        {% empty %}
+        <li>No listing.</li>
+        {% endfor %}
+        <hr>
+    </div>
+</div>
+
+{% endblock %}

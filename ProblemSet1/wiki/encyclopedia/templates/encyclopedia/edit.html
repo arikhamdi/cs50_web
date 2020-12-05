@@ -1,0 +1,27 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Edit {{ title }}
+{% endblock %}
+
+{% block body %}
+
+    <h1> Edit {{ title }}</h1>
+    {% if message %}
+        <div class="alert alert-{{ warning }}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endif %}
+    
+    <form  method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="sumit">edit</button>
+    </form>
+    
+
+
+
+
+
+{% endblock %}

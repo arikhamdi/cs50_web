@@ -1,0 +1,65 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    <h1> Listing : {{ listing.title }}</h1>
+    <h5>in {{ listing.category }}</h5>
+
+    {% if user.is_authenticated %}
+        {% if watched %}
+            watched
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="watch" class="btn btn-info">remove from watchlist</button>
+            </form>
+        {% else %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="watch" class="btn btn-info">Add to watchlist</button>
+            </form>
+        {% endif %}
+    {% endif %}
+    
+    <img src="{{ listing.image }}" alt="{{ listing.title }}">
+    <p>{{ listing.description }}</p>
+    {% if bid %}
+        <p>€{{ bid.amount__max}}</p>    
+    {% else %}
+        <p>€{{ listing.price }} </p>
+    {% endif %}
+    
+
+    {% if user.is_authenticated %}
+        <form method='POST'>
+            {% csrf_token %}
+            <input type="number" class="form-control" placeholder="Bid" name="bid">
+            <button type="submit" class="btn btn-primary">Place Bid</button>
+        </form>
+        {% else %}
+        <p>Please <a href="{% url 'login' %}">Log In</a> to make a bid</p>
+    {% endif %}
+
+    <h4>Details</h4>
+    <ul>
+        <li>Listed by :
+            {% for w in watcher %}
+                {{ w }} {% if not forloop.last %},{% endif %}
+            {% empty %}
+                No one watch
+            {% endfor %}
+        </li>
+        <li>Category : 
+            {% if listing.category %}
+                    {{ listing.category }}
+            {% else %}
+                No Category Listed
+            {% endif %}
+        </li>
+
+    </ul>
+</div>
+{% endblock %}
