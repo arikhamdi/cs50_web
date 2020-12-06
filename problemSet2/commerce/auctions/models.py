@@ -17,8 +17,10 @@ class AuctionListing(models.Model):
     price = models.IntegerField()
     image = models.URLField(blank=True)
     created = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="seller")
+    active = models.BooleanField()
+    category = models.ForeignKey(Category,blank=True, on_delete=models.SET_NULL, null=True, related_name="categories")
+    winner = models.ForeignKey(User,blank=True, on_delete=models.SET_NULL, null=True, related_name="winner")
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="seller")    
 
     def __str__(self):
         return f"{self.title} : {self.price}"
@@ -39,8 +41,9 @@ class Bid(models.Model):
         return f"{self.amount}"
 
 class Comment(models.Model):
-    content = models.TextField()
+    comment = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
+    auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="list_auction")
 
     def __str__(self):
         return f"{self.content}"

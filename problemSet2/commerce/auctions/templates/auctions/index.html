@@ -7,28 +7,31 @@
     <hr>
 
         {% for auction in listing %}
-        
-        <div class="row">
-                <div class="col-md-4">
-                    <a href="{% url 'single_listing' auction.id %}">
-                        <img src="{{ auction.image }}" alt="broomstick" width="100%">
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col col-md-12">
+            {% if auction.active or auction.winner == user or auction.seller == user %}
+                <div class="row">
+                    {% if auction.image %}
+                        <div class="col-md-4">
                             <a href="{% url 'single_listing' auction.id %}">
-                                <h2>{{ auction.title }}</h2> 
+                                <img src="{{ auction.image }}" alt="broomstick" width="100%">
                             </a>
                         </div>
-                        <div class="col col-md-12">
-                            <p>Price : €{{ auction.price }}</p>
+                    {% endif %}
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col col-md-12">
+                                    <a href="{% url 'single_listing' auction.id %}">
+                                        <h2 class="alert alert-{% if auction.active %}success{% else %}danger{% endif %}">{{ auction.title }}</h2> 
+                                    </a>
+                                </div>
+                                <div class="col col-md-6">
+                                    <p>Price : €{{ auction.price }}</p>
+                                </div>
+                                <div class="col col-md-12">
+                                    <p>Created {{ auction.created }}</p>
+                                </div>
+                            </div>                
                         </div>
-                        <div class="col col-md-12">
-                            <p>Created {{ auction.created }}</p>
-                        </div>
-                    </div>                
-                </div>
+            {% endif %}
         {% empty %}
         <li>No listing.</li>
         {% endfor %}
