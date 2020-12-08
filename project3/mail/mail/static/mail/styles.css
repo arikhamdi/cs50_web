@@ -1,0 +1,12 @@
+textarea {
+    min-height: 400px;
+}
+
+.maillist {
+    background-color : #ffffff;
+    border : 1px solid #d3d3d3;
+    color : black;
+    padding: 10px;
+    margin-bottom : 5px;
+    
+}
