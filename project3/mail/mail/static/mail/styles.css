@@ -7,6 +7,10 @@ textarea {
     border : 1px solid #d3d3d3;
     color : black;
     padding: 10px;
-    margin-bottom : 5px;
-    
+    margin-bottom : 5px; 
+}
+
+.maillist:hover {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    cursor: pointer;
 }
