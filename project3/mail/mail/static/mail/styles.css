@@ -14,3 +14,16 @@ textarea {
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     cursor: pointer;
 }
+
+.dating {
+    color:#888787;
+    font-weight: bold;
+}
+
+
+.singleMail > hr {
+    width: 100%;
+}
+.singleMail > .btn {
+    margin-right: 5px;
+}

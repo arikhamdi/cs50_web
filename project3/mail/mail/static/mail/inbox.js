@@ -61,10 +61,25 @@ function load_mailbox(mailbox)
         
         // iteration over each email
         emails.forEach(element => {
+        const elementDiv = document.createElement('div');
+        elementDiv.classList.add('row', 'maillist');
+
+        elementDiv.innerHTML = `<div class="col-lg-9">
+                                    <b>${element.sender}</b>  ${element.subject} 
+                                </div>
+                                <div class="col-lg-3 text-right dating">
+                                    ${element.timestamp}
+                                </div>`;
         
-        const elementDiv = create_and_fill(element);
-        // Add specific css class to div  
-        elementDiv.classList.add("row", "maillist");
+        // fill in all HTML balise with email data
+        // check read status, and change backgroud-color
+        // if it is true
+        if (element.read === true)
+        {
+            elementDiv.style.backgroundColor = '#d3d3d3';
+            elementDiv.style.color= "#0a0a0a";
+        }
+        
         elementDiv.addEventListener('click', () => {
           // mark as read
           fetch(`/emails/${element.id}`, {
@@ -76,6 +91,8 @@ function load_mailbox(mailbox)
           // call to function to display selected email 
           load_email(element.id, mailbox);
         });
+
+
         // Append all elements in displayed div
         document.querySelector("#emails-view").append(elementDiv); 
     });
@@ -100,11 +117,80 @@ function load_email(id, mailbox)
   .then(email => {
       //Print email
       console.log(email);
-      // call to function who create balise tag, css class
-      // return div element fill in with email data 
-      const elementDiv = create_and_fill(email, mailbox);
-      // Add specific css class to div
-      elementDiv.classList.add("row", "sigleMail");
+      // Creating HTML balise to display emails datas
+    const elementDiv = document.createElement('div');
+    const elementSender = document.createElement('div');
+    const elementRecipients = document.createElement('div');
+    const elementsubject = document.createElement('div');
+    const elementTime = document.createElement('div');
+    const elementReply = document.createElement('button');
+    const elementHr = document.createElement('hr');
+    const elementBody = document.createElement('p');
+    const elementArchived = document.createElement('button');
+    
+
+    // Add css class to each elements
+    elementDiv.classList.add("singleMail");
+    elementReply.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    elementArchived.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    
+    elementSender.innerHTML += `<b>from: </b> ${email.sender}`;
+
+    // email may have multiple recipients
+    // add coma + space after each recipient
+    email.recipients.forEach(recipients => {
+      elementRecipients.innerHTML += `${recipients}, `;
+    })
+    // remove the last coma and space for a better design
+    elementRecipients.innerHTML = `<b>to: </b> ${elementRecipients.innerHTML.slice(0,-2)}`;
+    elementsubject.innerHTML = `<b>Subject: </b>${email.subject}`;
+    elementTime.innerHTML = `<b>Timestamp: </b>${email.timestamp}`;
+    
+    // display Reply button on email
+    elementReply.innerHTML = "Reply";
+
+    elementReply.addEventListener('click', () => {
+      reply_email(email);
+    })
+    elementBody.innerHTML = `${email.body}`;
+
+    if (email.archived === false)
+    {
+      elementArchived.innerHTML = `Click to Archive`;
+      var toArchive = true;
+    }
+    else
+    {
+      elementArchived.innerHTML = `Click to Unarchive`;
+      var toArchive = false;
+    }
+    // waiting for click event
+    // archive or unarchive current email
+    // and load inbox after change
+    elementArchived.addEventListener('click', () => {
+      fetch(`/emails/${email.id}`, {
+        method: 'PUT',
+        body : JSON.stringify({
+          archived : toArchive
+        })
+      })
+      .then(() => load_mailbox('inbox'));
+    })
+  
+    // append all child element to parent div
+    elementDiv.append(elementSender);
+    elementDiv.append(elementRecipients);
+    elementDiv.append(elementsubject);
+    elementDiv.append(elementTime);
+    if (mailbox !== 'sent')
+    {
+      elementDiv.append(elementReply);
+      elementDiv.append(elementArchived);
+    }
+    elementDiv.append(elementHr);
+    elementDiv.append(elementBody);
+    
+      
 
       // Append all elements in displyed div
       document.querySelector("#single-email").append(elementDiv); 
@@ -141,107 +227,5 @@ function send_email()
   return false;
 }
 
-function create_and_fill(element, mailbox)
-{
-    // Creating HTML balise to display emails datas
-    const elementDiv = document.createElement('div');
-    const elementsubject = document.createElement('h4');
-    const elementSender = document.createElement('p');
-    const elementTime = document.createElement('p');
-    
-
-    // Add css class to each elements
-    elementsubject.classList.add("col-sm-10");
-    elementSender.classList.add("col-sm-5");
-    elementTime.classList.add("col-sm-12");
-    
-
-    // fill in all HTML balise with email data
-    // check read status, and change backgroud-color
-    // if it is true
-    if (element.read === true)
-    {
-      if (document.querySelector('#emails-view').style.display === 'block')
-      {
-        elementDiv.style.backgroundColor = '#d3d3d3';
-        elementDiv.style.color= "#0a0a0a";
-      }
-    }
-
-    elementsubject.innerHTML = `${element.subject}`;
-    elementSender.innerHTML += `from: ${element.sender}`;
-    elementTime.innerHTML = `${element.timestamp}`;
-    
-    
-    // append all child element to parent div
-    elementDiv.append(elementsubject);
-    // 
-    if ((mailbox === 'inbox' || mailbox === 'archive') 
-          && document.querySelector('#emails-view').style.display === 'none')
-    {
-      const elementArchived = document.createElement('button');
-      elementArchived.classList.add('btn', 'btn-info', 'col-sm-2');
-      
-      if (element.archived === false)
-      {
-        elementArchived.innerHTML = `Click to Archive`;
-        var toArchive = true;
-      }
-      else
-      {
-        elementArchived.innerHTML = `Click to Unarchive`;
-        var toArchive = false;
-      }
-      
-      elementDiv.append(elementArchived);
-      elementArchived.addEventListener('click', () => {
-        fetch(`/emails/${element.id}`, {
-          method: 'PUT',
-          body : JSON.stringify({
-            archived : toArchive
-          })
-        })
-        load_mailbox('inbox');
-      })
-    }
-    
-    elementDiv.append(elementSender);
-    
-    
-    // display Reply button on email
-    if (mailbox === 'inbox' || mailbox === 'archive') 
-    {
-      const elementRecipients = document.createElement('p');
-      const elementReply = document.createElement('button');
-      const elementBody = document.createElement('p');
-
-      elementReply.classList.add('btn', 'btn-success','col-sm-2','text-center');
-      elementBody.classList.add("col-sm-12");
-      elementRecipients.classList.add("col-sm-7");
-
-      // email may have multiple recipients
-      // add coma + space after each recipient
-      element.recipients.forEach(recipients => {
-        elementRecipients.innerHTML += `${recipients}, `;
-      })
-      // remove the last coma and space for a better design
-      elementRecipients.innerHTML = `to: ${elementRecipients.innerHTML.slice(0,-2)}`;
-      
-      elementReply.innerHTML = "Reply";
-
-      elementReply.addEventListener('click', () => {
-        reply_email(element);
-      })
-      elementBody.innerHTML = `${element.body}`;
-      
-
-
-      elementDiv.append(elementRecipients);
-      elementDiv.append(elementReply);
-      elementDiv.append(elementBody);
-    }
-    elementDiv.append(elementTime);
-    return elementDiv;    
-}
 
 
