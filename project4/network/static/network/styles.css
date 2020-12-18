@@ -1,0 +1,28 @@
+form {
+    border: 1px solid rgb(194, 194, 194);
+    border-radius: 3px;
+    padding: 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.post {
+    border: 1px solid rgb(194, 194, 194);
+    border-radius:3px;
+    padding:15px;
+    margin-bottom: 5px;
+}
+
+.post .created {
+    color:rgb(117, 117, 117);
+}
+
+.post .bi-heart-fill {
+    color :red;
+}
+
+/* pagination */
+.pagination { 
+    margin:40px 0; 
+    font-weight:bold;
+}

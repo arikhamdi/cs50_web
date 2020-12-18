@@ -1,0 +1,22 @@
+{% extends 'network/layout.html' %}
+
+{% block title %}Profile for {{ user.username }}{% endblock %}
+
+{% block body %}
+
+<h1>Hello, {{ user.username }}</h1>
+<h4>Followers : 0</h4>
+<h4>Following : 0</h4>
+<hr>
+{% for post in posts %}
+    <div class="post">
+        <p>{{ post.content }}</p>
+        <p class="created">{{ post.created }}</p>
+        <a href="">Edit</a>
+    </div>
+{% empty %}
+    <p>No posts found</p>
+{% endfor %}
+<hr>
+{% include "network/pagination.html" with page=posts %}
+{% endblock %}
