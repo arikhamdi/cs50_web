@@ -5,8 +5,9 @@
 {% block body %}
 
 <h1>Hello, {{ user.username }}</h1>
-<h4>Followers : 0</h4>
-<h4>Following : 0</h4>
+<h4>Followers : {{ follower.count }}</h4>
+<h4>Following : {{ following.count }}</h4>
+
 <hr>
 {% for post in posts %}
     <div class="post">
