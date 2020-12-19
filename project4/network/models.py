@@ -12,6 +12,7 @@ class Post(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
     created = models.DateTimeField(auto_now_add=True)
+    like = models.ManyToManyField(User, related_name="user_set")
 
     class Meta:
         ordering = ('-created',)

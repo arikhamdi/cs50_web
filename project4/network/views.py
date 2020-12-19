@@ -56,8 +56,6 @@ def follow(request, id):
     post = get_object_or_404(Post, id=id)
     user = get_object_or_404(User, id=post.author.id)
     if request.method == "PUT":
-        data = json.loads(request.body)
-        # if data.get('following') == 'follow':
         if user not in request.user.following.all():
             request.user.following.add(user)
             request.user.save()
@@ -66,6 +64,21 @@ def follow(request, id):
             request.user.following.remove(user)
             request.user.save()
             return JsonResponse({"message" : 'unfollowed' }, status=201)
+    return HttpResponseRedirect(reverse('index'))
+
+@csrf_exempt
+@login_required
+def like(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == "PUT":
+        if request.user not in post.like.all():
+            post.like.add(request.user)
+            post.save()
+            return JsonResponse({'message' : 'liked'}, status=201)
+        elif request.user in post.like.all():
+            post.like.remove(request.user)
+            post.save()
+            return JsonResponse({'message': 'unliked'}, status=201)
     return HttpResponseRedirect(reverse('index'))
 
 @login_required

@@ -14,25 +14,33 @@
 
     <div class="posts">
         {% for post in posts %}
-        <div class="post row ">
-            <h3 class="col-sm-10">{{ post.author|capfirst }}</h3>
+        <div class="post">
+            <h3>{{ post.author|capfirst }}</h3>
             {% if user != post.author and user.is_authenticated %}
                     {% if post.author in following %}
-                        <button id="unfollow_{{ post.id }}" class="follow col-sm-2 btn btn-sm btn-outline-primary" onclick="check_follow('{{ post.id }}', 'unfollow')">Unfollow</button>
+                        <button id="unfollow_{{ post.id }}" style="float:right" class="follow btn btn-sm btn-outline-primary" onclick="check_follow('{{ post.id }}', 'unfollow')">Unfollow</button>
                     {% else %}
-                        <button id="follow_{{ post.id }}" class="follow col-sm-2 btn btn-sm btn-success" onclick="check_follow('{{ post.id }}', 'follow')">follow</button>
+                        <button id="follow_{{ post.id }}" style="float:right" class="follow btn btn-sm btn-success" onclick="check_follow('{{ post.id }}', 'follow')">follow</button>
                     {% endif %}
             {% else %}
-                <a class="col-sm-12" href="">Edit</a>
+                <a href="">Edit</a>
             {% endif %}
-            <p class="col-sm-12">{{ post.content }}</p>
-            <p class="created col-sm-12">{{ post.created }}</p>
-            <p class="col-sm-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                </svg> 0
-            </p>
-            <a class="col-sm-6" href="">Comment</a>
+            <p>{{ post.content }}</p>
+            <p class="created">{{ post.created }}</p>
+            
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+            </svg> <span id="count_{{ post.id }}">{{ post.like.count }}</span>
+            <br> 
+            {% if user != post.author and user.is_authenticated %}
+                <button id="like_{{ post.id }}" onclick='like_post("{{ post.id }}")' class="btn btn-sm btn-link">
+                    {% if user not in post.like.all %}
+                        like
+                    {% else %}
+                        unlike
+                    {% endif %}
+                </button>
+            {% endif %}
         </div>
             {% empty %}
                 <p>No posts found</p>
