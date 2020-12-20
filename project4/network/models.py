@@ -16,5 +16,10 @@ class Post(models.Model):
 
     class Meta:
         ordering = ('-created',)
+    
+    def serialize(self):
+        return {
+            "content" : self.content,
+        }
 
 

@@ -16,16 +16,14 @@
         {% for post in posts %}
         <div class="post">
             <h3>{{ post.author|capfirst }}</h3>
-            {% if user != post.author and user.is_authenticated %}
-                    {% if post.author in following %}
-                        <button id="unfollow_{{ post.id }}" style="float:right" class="follow btn btn-sm btn-outline-primary" onclick="check_follow('{{ post.id }}', 'unfollow')">Unfollow</button>
-                    {% else %}
-                        <button id="follow_{{ post.id }}" style="float:right" class="follow btn btn-sm btn-success" onclick="check_follow('{{ post.id }}', 'follow')">follow</button>
-                    {% endif %}
-            {% else %}
-                <a href="">Edit</a>
+            {% if user.is_authenticated %}
+                {% if user != post.author %}   
+                    <button id="unfollow_{{ post.id }}" style="float:right" class="follow btn btn-sm btn-outline-{% if post.author in following %}primary{% else %}success{% endif %}" onclick="edit_follow('{{ post.id }}', 'unfollow')">{% if post.author in following %}Unfollow{% else %}follow{% endif %}</button> 
+                {% else %}
+                    <button id="edit_{{ post.id }}" onclick='edit_post("{{ post.id }}")' class="btn btn-sm btn-link">Edit</button>
+                {% endif %}
             {% endif %}
-            <p>{{ post.content }}</p>
+            <div id="content_{{ post.id }}">{{ post.content }}</div>
             <p class="created">{{ post.created }}</p>
             
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">

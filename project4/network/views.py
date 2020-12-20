@@ -81,6 +81,23 @@ def like(request, id):
             return JsonResponse({'message': 'unliked'}, status=201)
     return HttpResponseRedirect(reverse('index'))
 
+@csrf_exempt
+@login_required
+def edit(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        post.content = data['content']
+        post.save()
+        return JsonResponse({
+            'message': 'success',
+            'content' : post.content
+                })
+    if request.method == 'GET':
+        return HttpResponseRedirect(reverse('index'))
+    return HttpResponseRedirect(reverse('index'))
+
+
 @login_required
 def show_profile(request):
     posts = Post.objects.filter(author=request.user)
